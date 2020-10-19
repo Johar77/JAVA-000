@@ -1,0 +1,238 @@
+Classfile /E:/JavaTrain/homework/JAVA-000/Week_01/jvm-week1/src/main/java/com/johar/jeektime/jvmweek1/topic1/Hello.class
+  Last modified 2020-10-19; size 1302 bytes
+  MD5 checksum 6d3cb8ade864affc32f4365342328e7e
+  Compiled from "Hello.java"
+public class com.johar.jeektime.jvmweek1.topic1.Hello
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #17.#42        // java/lang/Object."<init>":()V
+   #2 = Fieldref           #43.#44        // java/lang/System.out:Ljava/io/PrintStream;
+   #3 = Class              #45            // java/lang/StringBuilder
+   #4 = Methodref          #3.#42         // java/lang/StringBuilder."<init>":()V
+   #5 = String             #46            // a + b =
+   #6 = Methodref          #3.#47         // java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+   #7 = Methodref          #3.#48         // java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+   #8 = Methodref          #3.#49         // java/lang/StringBuilder.toString:()Ljava/lang/String;
+   #9 = Methodref          #50.#51        // java/io/PrintStream.println:(Ljava/lang/String;)V
+  #10 = String             #52            // b - a =
+  #11 = String             #53            // a * b =
+  #12 = String             #54            // a / b =
+  #13 = String             #55            // a % b =
+  #14 = String             #56            //  b > a
+  #15 = String             #57            // count:
+  #16 = Class              #58            // com/johar/jeektime/jvmweek1/topic1/Hello
+  #17 = Class              #59            // java/lang/Object
+  #18 = Utf8               <init>
+  #19 = Utf8               ()V
+  #20 = Utf8               Code
+  #21 = Utf8               LineNumberTable
+  #22 = Utf8               LocalVariableTable
+  #23 = Utf8               this
+  #24 = Utf8               Lcom/johar/jeektime/jvmweek1/topic1/Hello;
+  #25 = Utf8               main
+  #26 = Utf8               ([Ljava/lang/String;)V
+  #27 = Utf8               i
+  #28 = Utf8               I
+  #29 = Utf8               args
+  #30 = Utf8               [Ljava/lang/String;
+  #31 = Utf8               a
+  #32 = Utf8               b
+  #33 = Utf8               sum
+  #34 = Utf8               sub
+  #35 = Utf8               mul
+  #36 = Utf8               div
+  #37 = Utf8               reminder
+  #38 = Utf8               StackMapTable
+  #39 = Class              #30            // "[Ljava/lang/String;"
+  #40 = Utf8               SourceFile
+  #41 = Utf8               Hello.java
+  #42 = NameAndType        #18:#19        // "<init>":()V
+  #43 = Class              #60            // java/lang/System
+  #44 = NameAndType        #61:#62        // out:Ljava/io/PrintStream;
+  #45 = Utf8               java/lang/StringBuilder
+  #46 = Utf8               a + b =
+  #47 = NameAndType        #63:#64        // append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #48 = NameAndType        #63:#65        // append:(I)Ljava/lang/StringBuilder;
+  #49 = NameAndType        #66:#67        // toString:()Ljava/lang/String;
+  #50 = Class              #68            // java/io/PrintStream
+  #51 = NameAndType        #69:#70        // println:(Ljava/lang/String;)V
+  #52 = Utf8               b - a =
+  #53 = Utf8               a * b =
+  #54 = Utf8               a / b =
+  #55 = Utf8               a % b =
+  #56 = Utf8                b > a
+  #57 = Utf8               count:
+  #58 = Utf8               com/johar/jeektime/jvmweek1/topic1/Hello
+  #59 = Utf8               java/lang/Object
+  #60 = Utf8               java/lang/System
+  #61 = Utf8               out
+  #62 = Utf8               Ljava/io/PrintStream;
+  #63 = Utf8               append
+  #64 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;
+  #65 = Utf8               (I)Ljava/lang/StringBuilder;
+  #66 = Utf8               toString
+  #67 = Utf8               ()Ljava/lang/String;
+  #68 = Utf8               java/io/PrintStream
+  #69 = Utf8               println
+  #70 = Utf8               (Ljava/lang/String;)V
+{
+  public com.johar.jeektime.jvmweek1.topic1.Hello();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 10: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/johar/jeektime/jvmweek1/topic1/Hello;
+
+  public static void main(java.lang.String[]);
+    descriptor: ([Ljava/lang/String;)V
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=3, locals=9, args_size=1
+         0: iconst_1
+         1: istore_1
+         2: iconst_2
+         3: istore_2
+         4: iload_1
+         5: iload_2
+         6: iadd
+         7: istore_3
+         8: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        11: new           #3                  // class java/lang/StringBuilder
+        14: dup
+        15: invokespecial #4                  // Method java/lang/StringBuilder."<init>":()V
+        18: ldc           #5                  // String a + b =
+        20: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        23: iload_3
+        24: invokevirtual #7                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+        27: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        30: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        33: iload_2
+        34: iload_1
+        35: isub
+        36: istore        4
+        38: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        41: new           #3                  // class java/lang/StringBuilder
+        44: dup
+        45: invokespecial #4                  // Method java/lang/StringBuilder."<init>":()V
+        48: ldc           #10                 // String b - a =
+        50: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        53: iload         4
+        55: invokevirtual #7                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+        58: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        61: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        64: iload_1
+        65: iload_2
+        66: imul
+        67: istore        5
+        69: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        72: new           #3                  // class java/lang/StringBuilder
+        75: dup
+        76: invokespecial #4                  // Method java/lang/StringBuilder."<init>":()V
+        79: ldc           #11                 // String a * b =
+        81: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        84: iload         5
+        86: invokevirtual #7                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+        89: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        92: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        95: iload_1
+        96: iload_2
+        97: idiv
+        98: istore        6
+       100: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       103: new           #3                  // class java/lang/StringBuilder
+       106: dup
+       107: invokespecial #4                  // Method java/lang/StringBuilder."<init>":()V
+       110: ldc           #12                 // String a / b =
+       112: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+       115: iload         6
+       117: invokevirtual #7                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+       120: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+       123: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       126: iload_1
+       127: iload_2
+       128: irem
+       129: istore        7
+       131: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       134: new           #3                  // class java/lang/StringBuilder
+       137: dup
+       138: invokespecial #4                  // Method java/lang/StringBuilder."<init>":()V
+       141: ldc           #13                 // String a % b =
+       143: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+       146: iload         7
+       148: invokevirtual #7                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+       151: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+       154: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       157: iload_2
+       158: iload_1
+       159: if_icmple     170
+       162: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       165: ldc           #14                 // String  b > a
+       167: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       170: iconst_0
+       171: istore        8
+       173: iload         8
+       175: bipush        10
+       177: if_icmpge     212
+       180: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       183: new           #3                  // class java/lang/StringBuilder
+       186: dup
+       187: invokespecial #4                  // Method java/lang/StringBuilder."<init>":()V
+       190: ldc           #15                 // String count:
+       192: invokevirtual #6                  // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+       195: iload         8
+       197: invokevirtual #7                  // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+       200: invokevirtual #8                  // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+       203: invokevirtual #9                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       206: iinc          8, 1
+       209: goto          173
+       212: return
+      LineNumberTable:
+        line 13: 0
+        line 14: 2
+        line 15: 4
+        line 16: 8
+        line 17: 33
+        line 18: 38
+        line 19: 64
+        line 20: 69
+        line 21: 95
+        line 22: 100
+        line 23: 126
+        line 24: 131
+        line 25: 157
+        line 26: 162
+        line 29: 170
+        line 30: 180
+        line 29: 206
+        line 32: 212
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+          173      39     8     i   I
+            0     213     0  args   [Ljava/lang/String;
+            2     211     1     a   I
+            4     209     2     b   I
+            8     205     3   sum   I
+           38     175     4   sub   I
+           69     144     5   mul   I
+          100     113     6   div   I
+          131      82     7 reminder   I
+      StackMapTable: number_of_entries = 3
+        frame_type = 255 /* full_frame */
+          offset_delta = 170
+          locals = [ class "[Ljava/lang/String;", int, int, int, int, int, int, int ]
+          stack = []
+        frame_type = 252 /* append */
+          offset_delta = 2
+          locals = [ int ]
+        frame_type = 250 /* chop */
+          offset_delta = 38
+}
