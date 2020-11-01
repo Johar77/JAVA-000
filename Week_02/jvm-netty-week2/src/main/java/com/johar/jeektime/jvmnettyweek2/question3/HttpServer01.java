@@ -37,7 +37,8 @@ public class HttpServer01 {
                 String body = "hello, nio";
 
                 // 增加Content-Length，方便请求客户端通过body的长度解析body内容
-                printWriter.println("Content-Length:" + body.getBytes("UTF-8").length);
+                int contentLength = body.getBytes("UTF-8").length;
+                printWriter.println("Content-Length:" + contentLength);
                 // socket连接结束，短连接
                 printWriter.println("Connection:close");
 
