@@ -1,6 +1,6 @@
 package com.johar.jeektime.nettyjeektimeweek3.gateway.inbound;
 
-import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.httpclient.HttpOutbounderHandler;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.httpclient.HttpOutboundHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -17,11 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
     private final String proxyServer;
-    private HttpOutbounderHandler handler;
+    private HttpOutboundHandler handler;
 
     public HttpInboundHandler(String proxyServer) {
         this.proxyServer = proxyServer;
-        this.handler = new HttpOutbounderHandler(this.proxyServer);
+        this.handler = new HttpOutboundHandler(this.proxyServer);
     }
 
     @Override

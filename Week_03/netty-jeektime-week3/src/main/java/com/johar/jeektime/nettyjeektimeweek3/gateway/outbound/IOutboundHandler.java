@@ -10,6 +10,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
  * @Date: 2020/11/2 22:42
  * @Since: 1.0.0
  */
-public interface IInboundHandler {
+public interface IOutboundHandler {
     void handle(final FullHttpRequest request, final ChannelHandlerContext ctx);
 }

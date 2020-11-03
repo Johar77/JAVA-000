@@ -1,7 +1,7 @@
 package com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.httpclient;
 
 import com.johar.jeektime.nettyjeektimeweek3.gateway.common.HttpThreadPool;
-import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.IInboundHandler;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.IOutboundHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -13,20 +13,14 @@ import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.client.methods.*;
 import org.apache.http.concurrent.FutureCallback;
-import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.HttpClientConnectionManager;
-import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.impl.nio.reactor.IOReactorConfig;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.net.URI;
-import java.util.stream.Stream;
 
 /**
  * @ClassName: HttpOutbounderHandler
@@ -36,12 +30,12 @@ import java.util.stream.Stream;
  * @Since: 1.0.0
  */
 @Slf4j
-public class HttpOutbounderHandler implements IInboundHandler {
+public class HttpOutboundHandler implements IOutboundHandler {
 
     private final String backendUrl;
     private CloseableHttpAsyncClient httpClient;
 
-    public HttpOutbounderHandler(String backendUrl) {
+    public HttpOutboundHandler(String backendUrl) {
         this.backendUrl = backendUrl;
         HttpClientConnectionManager connManager;
         IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
