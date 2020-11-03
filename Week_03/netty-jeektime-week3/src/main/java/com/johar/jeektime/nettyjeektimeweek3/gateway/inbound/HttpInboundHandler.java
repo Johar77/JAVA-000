@@ -2,7 +2,9 @@ package com.johar.jeektime.nettyjeektimeweek3.gateway.inbound;
 
 import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.AddHeaderHttpRequestFilter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.IHttpRequestFilter;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.IOutboundHandler;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.httpclient.HttpOutboundHandler;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.netty4.NettClientOutboundHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -24,12 +26,13 @@ import java.util.List;
 @Slf4j
 public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
     private final String proxyServer;
-    private HttpOutboundHandler handler;
+    private IOutboundHandler handler;
     private List<IHttpRequestFilter> httpRequestFilters;
 
     public HttpInboundHandler(String proxyServer) {
         this.proxyServer = proxyServer;
-        this.handler = new HttpOutboundHandler(this.proxyServer);
+        //this.handler = new HttpOutboundHandler(this.proxyServer);
+        this.handler = new NettClientOutboundHandler(proxyServer);
         int orderId = 0;
         Header[] headers = new Header[]{ new BasicHeader("nio", "Johar")};
         this.httpRequestFilters = new ArrayList<>();
