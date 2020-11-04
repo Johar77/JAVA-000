@@ -1,5 +1,6 @@
 package com.johar.jeektime.nettyjeektimeweek3.gateway.router;
 
+import com.johar.jeektime.nettyjeektimeweek3.gateway.common.ProxyServerInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
@@ -17,13 +18,16 @@ import java.util.List;
 @Slf4j
 public class RouterManager {
 
-    private List<String> backEndUrls = new ArrayList<>();
+    private List<ProxyServerInfo> backEndUrls = new ArrayList<>();
 
-    private IHttpEndpointRouter httpEndpointRouter = new RandomHttpEndpointRouter();
+    private IHttpEndpointRouter httpEndpointRouter = new WeightedRandomHttpEndpointRouter();
 
     private RouterManager(){
-        String proxyServer = System.getProperty("proxyServer", "http://localhost:8808,http://localhost:8807,http://localhost:8806");
-        backEndUrls = Arrays.asList(proxyServer.split(",").clone());
+        //String proxyServer = System.getProperty("proxyServer", "http://localhost:8808,http://localhost:8807,http://localhost:8806");
+        //backEndUrls = Arrays.asList(proxyServer.split(",").clone());
+        backEndUrls.add(new ProxyServerInfo("http://localhost:8808", 5));
+        backEndUrls.add(new ProxyServerInfo("http://localhost:8807", 15));
+        backEndUrls.add(new ProxyServerInfo("http://localhost:8806", 25));
     }
 
     private static class RouterManagerHollder{
@@ -35,6 +39,8 @@ public class RouterManager {
     }
 
     public String getBackEndUrl(){
-        return httpEndpointRouter.route(backEndUrls);
+        String realUrl = httpEndpointRouter.route(backEndUrls);
+        log.info("RealUrl: {}", realUrl);
+        return realUrl;
     }
 }

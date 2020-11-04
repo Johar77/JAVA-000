@@ -1,5 +1,7 @@
 package com.johar.jeektime.nettyjeektimeweek3.gateway.router;
 
+import com.johar.jeektime.nettyjeektimeweek3.gateway.common.ProxyServerInfo;
+
 import java.util.List;
 
 /**
@@ -15,5 +17,5 @@ public interface IHttpEndpointRouter {
      * @param endpoints
      * @return
      */
-    String route(List<String> endpoints);
+    String route(List<ProxyServerInfo> endpoints);
 }

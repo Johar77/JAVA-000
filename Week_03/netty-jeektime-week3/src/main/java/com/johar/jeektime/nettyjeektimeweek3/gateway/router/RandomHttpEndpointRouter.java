@@ -1,5 +1,7 @@
 package com.johar.jeektime.nettyjeektimeweek3.gateway.router;
 
+import com.johar.jeektime.nettyjeektimeweek3.gateway.common.ProxyServerInfo;
+
 import java.util.List;
 import java.util.Random;
 
@@ -12,13 +14,13 @@ import java.util.Random;
  */
 public class RandomHttpEndpointRouter implements IHttpEndpointRouter {
     @Override
-    public String route(List<String> endpoints) {
+    public String route(List<ProxyServerInfo> endpoints) {
         if (endpoints == null | endpoints.isEmpty()){
             throw new IllegalArgumentException("endpoints can not be null");
         }
 
         int size = endpoints.size();
         int random = new Random().nextInt(size);
-        return endpoints.get(random);
+        return endpoints.get(random).getBackEndUrl();
     }
 }
