@@ -17,7 +17,7 @@ public class NettyServerApplication {
     public final static String GATEWAY_VERSION = "1.0.0";
 
     public static void main(String[] args) {
-        String proxyServer = System.getProperty("proxyServer", "http://localhost:8808");
+        String proxyServer = System.getProperty("proxyServer", "http://localhost:8808,http://localhost:8807,http://localhost:8806");
         String proxyPort = System.getProperty("proxyPort", "8888");
 
         int port = Integer.parseInt(proxyPort);

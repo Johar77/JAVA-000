@@ -14,23 +14,27 @@ import io.netty.handler.codec.http.*;
  */
 public class NettClientOutboundHandler implements IOutboundHandler {
 
-    private final String backendUrl;
+    private String backendUrl;
 
     public NettClientOutboundHandler(String backendUrl){
         this.backendUrl = backendUrl;
     }
 
     @Override
-    public void handle(final FullHttpRequest request, final ChannelHandlerContext ctx) {
-        request.headers().set("Host", this.backendUrl);
-        FullHttpResponse response = NettyHttpClient.send(request);
-        if (request != null){
-            if (!HttpUtil.isKeepAlive(request)){
-                ctx.write(response).addListener(ChannelFutureListener.CLOSE);
-            } else {
-                ctx.write(response);
-            }
+    public void handle(final FullHttpRequest fullHttpRequest, final ChannelHandlerContext ctx) {
+        FullHttpRequest newHttpRequest = fullHttpRequest.copy();
+        newHttpRequest.headers().set("Host", this.backendUrl);
+        FullHttpResponse response = NettyHttpClient.send(newHttpRequest);
+        if (!HttpUtil.isKeepAlive(fullHttpRequest)){
+            ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+        } else {
+            ctx.write(response);
         }
         ctx.flush();
+    }
+
+    @Override
+    public void setBackendUrl(String backendUrl) {
+        this.backendUrl = backendUrl;
     }
 }

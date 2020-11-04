@@ -2,6 +2,8 @@ package com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.httpclient;
 
 import com.johar.jeektime.nettyjeektimeweek3.gateway.common.HttpThreadPool;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.IOutboundHandler;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.router.IHttpEndpointRouter;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.router.RandomHttpEndpointRouter;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -32,8 +34,8 @@ import java.io.IOException;
 @Slf4j
 public class HttpOutboundHandler implements IOutboundHandler {
 
-    private final String backendUrl;
-    private CloseableHttpAsyncClient httpClient;
+    private String backendUrl;
+    private final CloseableHttpAsyncClient httpClient;
 
     public HttpOutboundHandler(String backendUrl) {
         this.backendUrl = backendUrl;
@@ -59,6 +61,11 @@ public class HttpOutboundHandler implements IOutboundHandler {
         HttpThreadPool.getHttpThreadPool().submit(() -> {
             doExecute(request, ctx, url);
         });
+    }
+
+    @Override
+    public void setBackendUrl(String backendUrl) {
+        this.backendUrl = backendUrl;
     }
 
     private void doExecute(final FullHttpRequest request, final ChannelHandlerContext ctx, final String backendUrl) {
