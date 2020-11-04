@@ -18,10 +18,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
  */
 public class HttpInboundInitializer extends ChannelInitializer<SocketChannel> {
 
-    private final String proxyServer;
-
-    public HttpInboundInitializer(String proxyServer) {
-        this.proxyServer = proxyServer;
+    public HttpInboundInitializer() {
     }
 
     @Override
@@ -29,6 +26,6 @@ public class HttpInboundInitializer extends ChannelInitializer<SocketChannel> {
         ChannelPipeline pipeline = socketChannel.pipeline();
         pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new HttpObjectAggregator(1024 * 1024));
-        pipeline.addLast(new HttpInboundHandler(proxyServer));
+        pipeline.addLast(new HttpInboundHandler());
     }
 }

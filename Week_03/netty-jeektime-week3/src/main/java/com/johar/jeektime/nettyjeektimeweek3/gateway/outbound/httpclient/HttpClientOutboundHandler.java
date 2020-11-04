@@ -4,6 +4,7 @@ import com.johar.jeektime.nettyjeektimeweek3.gateway.common.HttpThreadPool;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.IOutboundHandler;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.router.IHttpEndpointRouter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.router.RandomHttpEndpointRouter;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.router.RouterManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -32,13 +33,11 @@ import java.io.IOException;
  * @Since: 1.0.0
  */
 @Slf4j
-public class HttpOutboundHandler implements IOutboundHandler {
+public class HttpClientOutboundHandler implements IOutboundHandler {
 
-    private String backendUrl;
     private final CloseableHttpAsyncClient httpClient;
 
-    public HttpOutboundHandler(String backendUrl) {
-        this.backendUrl = backendUrl;
+    public HttpClientOutboundHandler() {
         HttpClientConnectionManager connManager;
         IOReactorConfig ioReactorConfig = IOReactorConfig.custom()
                 .setConnectTimeout(1000)
@@ -57,15 +56,10 @@ public class HttpOutboundHandler implements IOutboundHandler {
 
     @Override
     public void handle(final FullHttpRequest request, final ChannelHandlerContext ctx) {
-        final String url = this.backendUrl + request.uri();
+        final String url = RouterManager.getInstance().getBackEndUrl() + request.uri();
         HttpThreadPool.getHttpThreadPool().submit(() -> {
             doExecute(request, ctx, url);
         });
-    }
-
-    @Override
-    public void setBackendUrl(String backendUrl) {
-        this.backendUrl = backendUrl;
     }
 
     private void doExecute(final FullHttpRequest request, final ChannelHandlerContext ctx, final String backendUrl) {

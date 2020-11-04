@@ -1,9 +1,10 @@
 package com.johar.jeektime.nettyjeektimeweek3.gateway.inbound;
 
-import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.AddHeaderHttpRequestFilter;
-import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.IHttpRequestFilter;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request.AddHeaderHttpRequestFilter;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request.AuthHttpRequestFilter;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request.HttpRequestFilterComparator;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request.IHttpRequestFilter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.IOutboundHandler;
-import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.httpclient.HttpOutboundHandler;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.netty4.NettClientOutboundHandler;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.router.IHttpEndpointRouter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.router.RandomHttpEndpointRouter;
@@ -16,7 +17,6 @@ import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,20 +28,20 @@ import java.util.List;
  */
 @Slf4j
 public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
-    private final List<String> proxyServers;
     private IOutboundHandler handler;
     private List<IHttpRequestFilter> httpRequestFilters;
     private IHttpEndpointRouter endpointRouter;
 
-    public HttpInboundHandler(String proxyServer) {
-        this.proxyServers = Arrays.asList(proxyServer.split(",").clone());
+    public HttpInboundHandler() {
         this.endpointRouter = new RandomHttpEndpointRouter();
         //this.handler = new HttpOutboundHandler(proxyServer);
-        this.handler = new NettClientOutboundHandler(proxyServer);
+        this.handler = new NettClientOutboundHandler();
         int orderId = 0;
         Header[] headers = new Header[]{ new BasicHeader("nio", "Johar")};
         this.httpRequestFilters = new ArrayList<>();
-        this.httpRequestFilters.add(orderId, new AddHeaderHttpRequestFilter(0, headers));
+        this.httpRequestFilters.add(new AddHeaderHttpRequestFilter(headers));
+        this.httpRequestFilters.add(new AuthHttpRequestFilter());
+        this.httpRequestFilters.sort(new HttpRequestFilterComparator());
     }
 
     @Override
@@ -50,11 +50,11 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
             FullHttpRequest fullHttpRequest = (FullHttpRequest)msg;
 
             for (IHttpRequestFilter httpRequestFilter : httpRequestFilters) {
-                httpRequestFilter.filter(fullHttpRequest, ctx);
+                if (!httpRequestFilter.filter(fullHttpRequest, ctx)){
+                    return;
+                }
             }
-            String url = this.endpointRouter.route(this.proxyServers);
-            log.info("HttpEndPointRouter: {}", url);
-            handler.setBackendUrl(url);
+
             handler.handle(fullHttpRequest, ctx);
 
         } catch (Exception e){

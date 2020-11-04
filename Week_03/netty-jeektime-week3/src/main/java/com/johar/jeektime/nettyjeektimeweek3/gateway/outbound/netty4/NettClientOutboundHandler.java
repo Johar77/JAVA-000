@@ -1,6 +1,7 @@
 package com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.netty4;
 
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.IOutboundHandler;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.router.RouterManager;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
@@ -14,16 +15,13 @@ import io.netty.handler.codec.http.*;
  */
 public class NettClientOutboundHandler implements IOutboundHandler {
 
-    private String backendUrl;
-
-    public NettClientOutboundHandler(String backendUrl){
-        this.backendUrl = backendUrl;
+    public NettClientOutboundHandler(){
     }
 
     @Override
     public void handle(final FullHttpRequest fullHttpRequest, final ChannelHandlerContext ctx) {
         FullHttpRequest newHttpRequest = fullHttpRequest.copy();
-        newHttpRequest.headers().set("Host", this.backendUrl);
+        newHttpRequest.headers().set("Host", RouterManager.getInstance().getBackEndUrl());
         FullHttpResponse response = NettyHttpClient.send(newHttpRequest);
         if (!HttpUtil.isKeepAlive(fullHttpRequest)){
             ctx.write(response).addListener(ChannelFutureListener.CLOSE);
@@ -31,10 +29,5 @@ public class NettClientOutboundHandler implements IOutboundHandler {
             ctx.write(response);
         }
         ctx.flush();
-    }
-
-    @Override
-    public void setBackendUrl(String backendUrl) {
-        this.backendUrl = backendUrl;
     }
 }

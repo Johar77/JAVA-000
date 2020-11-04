@@ -11,6 +11,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
  * @Since: 1.0.0
  */
 public interface IOutboundHandler {
+
     /**
      * 处理http请求转发，回复
      * @param request
@@ -18,9 +19,4 @@ public interface IOutboundHandler {
      */
     void handle(final FullHttpRequest request, final ChannelHandlerContext ctx);
 
-    /**
-     * 设置实际请求的url的前缀，例如：http://localhost:8808
-     * @param backendUrl
-     */
-    void setBackendUrl(String backendUrl);
 }

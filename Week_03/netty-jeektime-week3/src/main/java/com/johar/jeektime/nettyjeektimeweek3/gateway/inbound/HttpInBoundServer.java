@@ -27,11 +27,9 @@ import java.util.concurrent.ThreadFactory;
 public class HttpInBoundServer {
 
     private final int port;
-    private final String proxyServer;
 
-    public HttpInBoundServer(int port, String proxyServer) {
+    public HttpInBoundServer(int port) {
         this.port = port;
-        this.proxyServer = proxyServer;
     }
 
     public void run() {
@@ -56,7 +54,7 @@ public class HttpInBoundServer {
             bootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new HttpInboundInitializer(this.proxyServer));
+                    .childHandler(new HttpInboundInitializer());
 
             Channel channel = bootstrap.bind(port).sync().channel();
             log.info("start netty http  server success，server ip: http://127.0.0.1:{}/", port);

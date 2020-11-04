@@ -1,9 +1,8 @@
-package com.johar.jeektime.nettyjeektimeweek3.gateway.filter;
+package com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 import org.apache.http.Header;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 
@@ -16,27 +15,27 @@ import java.util.Arrays;
  */
 public class AddHeaderHttpRequestFilter implements IHttpRequestFilter {
 
-    private final int orderId;
     private final Header[] headers;
 
-    public AddHeaderHttpRequestFilter(int orderId, Header[] headers) {
-        this.orderId = orderId;
+    public AddHeaderHttpRequestFilter(Header[] headers) {
         this.headers = headers;
     }
 
     @Override
     public int getOrderId() {
-        return this.orderId;
+        return 0;
     }
 
     @Override
-    public void filter(final FullHttpRequest fullHttpRequest, final ChannelHandlerContext ctx) {
+    public boolean filter(final FullHttpRequest fullHttpRequest, final ChannelHandlerContext ctx) {
         if (this.headers == null || headers.length == 0){
-            return;
+            return true;
         }
 
         Arrays.stream(headers).forEach((header) ->{
             fullHttpRequest.headers().set(header.getName(), header.getValue());
         });
+
+        return true;
     }
 }

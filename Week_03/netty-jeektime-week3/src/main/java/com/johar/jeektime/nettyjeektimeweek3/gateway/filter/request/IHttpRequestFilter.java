@@ -1,4 +1,4 @@
-package com.johar.jeektime.nettyjeektimeweek3.gateway.filter;
+package com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -23,5 +23,5 @@ public interface IHttpRequestFilter {
      * @param fullHttpRequest
      * @param ctx
      */
-    void filter(final FullHttpRequest fullHttpRequest, final ChannelHandlerContext ctx);
+    boolean filter(final FullHttpRequest fullHttpRequest, final ChannelHandlerContext ctx);
 }
