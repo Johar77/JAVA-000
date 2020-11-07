@@ -55,11 +55,14 @@ public class HttpClientOutboundHandler implements IOutboundHandler {
     }
 
     @Override
-    public void handle(final FullHttpRequest request, final ChannelHandlerContext ctx) {
+    public FullHttpResponse handle(final FullHttpRequest request, final ChannelHandlerContext ctx) {
         final String url = RouterManager.getInstance().getBackEndUrl() + request.uri();
         HttpThreadPool.getHttpThreadPool().submit(() -> {
             doExecute(request, ctx, url);
         });
+
+        // TODO 支持ResponseFilter
+        return null;
     }
 
     private void doExecute(final FullHttpRequest request, final ChannelHandlerContext ctx, final String backendUrl) {

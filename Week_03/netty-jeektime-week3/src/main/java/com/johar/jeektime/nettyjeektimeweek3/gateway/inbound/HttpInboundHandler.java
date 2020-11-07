@@ -4,13 +4,18 @@ import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request.AddHeaderHtt
 import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request.AuthHttpRequestFilter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request.HttpRequestFilterComparator;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request.IHttpRequestFilter;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.response.IHttpResponseFilter;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.response.MatchHeaderHttpResponseFilter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.IOutboundHandler;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.netty4.NettClientOutboundHandler;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.router.IHttpEndpointRouter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.router.RandomHttpEndpointRouter;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpUtil;
 import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
@@ -30,6 +35,7 @@ import java.util.List;
 public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
     private IOutboundHandler handler;
     private List<IHttpRequestFilter> httpRequestFilters;
+    private IHttpResponseFilter httpResponseFilter;
     private IHttpEndpointRouter endpointRouter;
 
     public HttpInboundHandler() {
@@ -42,6 +48,8 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
         this.httpRequestFilters.add(new AddHeaderHttpRequestFilter(headers));
         this.httpRequestFilters.add(new AuthHttpRequestFilter());
         this.httpRequestFilters.sort(new HttpRequestFilterComparator());
+
+        this.httpResponseFilter = new MatchHeaderHttpResponseFilter();
     }
 
     @Override
@@ -49,13 +57,26 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
         try{
             FullHttpRequest fullHttpRequest = (FullHttpRequest)msg;
 
+            // RequestFilter
             for (IHttpRequestFilter httpRequestFilter : httpRequestFilters) {
                 if (!httpRequestFilter.filter(fullHttpRequest, ctx)){
                     return;
                 }
             }
 
-            handler.handle(fullHttpRequest, ctx);
+            // 请求实际的服务
+            FullHttpResponse fullHttpResponse = handler.handle(fullHttpRequest, ctx);
+
+            // ResponseFilter
+            httpResponseFilter.filter(fullHttpResponse, ctx);
+
+            // 返回客户端
+            if (!HttpUtil.isKeepAlive(fullHttpRequest)){
+                ctx.write(fullHttpResponse).addListener(ChannelFutureListener.CLOSE);
+            } else {
+                ctx.write(fullHttpResponse);
+            }
+            ctx.flush();
 
         } catch (Exception e){
             log.error("HttpInboundHandler channelRead error: ", e);

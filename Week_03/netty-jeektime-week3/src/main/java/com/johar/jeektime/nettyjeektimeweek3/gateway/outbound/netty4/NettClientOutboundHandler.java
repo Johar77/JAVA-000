@@ -19,15 +19,18 @@ public class NettClientOutboundHandler implements IOutboundHandler {
     }
 
     @Override
-    public void handle(final FullHttpRequest fullHttpRequest, final ChannelHandlerContext ctx) {
+    public FullHttpResponse handle(final FullHttpRequest fullHttpRequest, final ChannelHandlerContext ctx) {
         FullHttpRequest newHttpRequest = fullHttpRequest.copy();
         newHttpRequest.headers().set("Host", RouterManager.getInstance().getBackEndUrl());
         FullHttpResponse response = NettyHttpClient.send(newHttpRequest);
-        if (!HttpUtil.isKeepAlive(fullHttpRequest)){
-            ctx.write(response).addListener(ChannelFutureListener.CLOSE);
-        } else {
-            ctx.write(response);
-        }
-        ctx.flush();
+//        if (!HttpUtil.isKeepAlive(fullHttpRequest)){
+//            ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+//        } else {
+//            ctx.write(response);
+//        }
+//        ctx.flush();
+
+        // 支持ResponseFilte
+        return response;
     }
 }

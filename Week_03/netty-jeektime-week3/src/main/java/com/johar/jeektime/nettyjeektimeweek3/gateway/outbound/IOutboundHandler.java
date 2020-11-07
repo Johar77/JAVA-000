@@ -2,6 +2,7 @@ package com.johar.jeektime.nettyjeektimeweek3.gateway.outbound;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
+import io.netty.handler.codec.http.FullHttpResponse;
 
 /**
  * @ClassName: IInboundHandler
@@ -17,6 +18,6 @@ public interface IOutboundHandler {
      * @param request
      * @param ctx
      */
-    void handle(final FullHttpRequest request, final ChannelHandlerContext ctx);
+    FullHttpResponse handle(final FullHttpRequest request, final ChannelHandlerContext ctx);
 
 }

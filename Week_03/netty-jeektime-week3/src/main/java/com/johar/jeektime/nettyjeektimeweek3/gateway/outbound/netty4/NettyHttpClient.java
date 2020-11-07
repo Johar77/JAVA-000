@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 public class NettyHttpClient  {
 
+
     public static FullHttpResponse send(final FullHttpRequest fullHttpRequest){
         HttpVersion version = HttpVersion.HTTP_1_1;
         HttpResponseStatus status = HttpResponseStatus.NO_CONTENT;
