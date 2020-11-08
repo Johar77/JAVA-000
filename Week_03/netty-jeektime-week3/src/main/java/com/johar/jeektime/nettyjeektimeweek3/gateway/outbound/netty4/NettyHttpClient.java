@@ -28,7 +28,7 @@ public class NettyHttpClient  {
 
     public static FullHttpResponse send(final FullHttpRequest fullHttpRequest){
         HttpVersion version = HttpVersion.HTTP_1_1;
-        HttpResponseStatus status = HttpResponseStatus.NO_CONTENT;
+        HttpResponseStatus status = HttpResponseStatus.INTERNAL_SERVER_ERROR;;
         FullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(version, status);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try{

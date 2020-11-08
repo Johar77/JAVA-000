@@ -7,7 +7,10 @@ import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.request.IHttpRequest
 import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.response.IHttpResponseFilter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.filter.response.MatchHeaderHttpResponseFilter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.IOutboundHandler;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.netty4.FullHttpResponseFuture;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.netty4.NettClientOutboundHandler;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.netty4.pool.NettyHttpClientPool;
+import com.johar.jeektime.nettyjeektimeweek3.gateway.outbound.netty4.pool.RequestPendingCenter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.router.IHttpEndpointRouter;
 import com.johar.jeektime.nettyjeektimeweek3.gateway.router.RandomHttpEndpointRouter;
 import io.netty.channel.ChannelFutureListener;
@@ -37,6 +40,7 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
     private List<IHttpRequestFilter> httpRequestFilters;
     private IHttpResponseFilter httpResponseFilter;
     private IHttpEndpointRouter endpointRouter;
+    private NettyHttpClientPool nettyHttpClientPool;
 
     public HttpInboundHandler() {
         this.endpointRouter = new RandomHttpEndpointRouter();
@@ -50,6 +54,8 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
         this.httpRequestFilters.sort(new HttpRequestFilterComparator());
 
         this.httpResponseFilter = new MatchHeaderHttpResponseFilter();
+
+        this.nettyHttpClientPool = new NettyHttpClientPool();
     }
 
     @Override
@@ -65,7 +71,11 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
             }
 
             // 请求实际的服务
-            FullHttpResponse fullHttpResponse = handler.handle(fullHttpRequest, ctx);
+            //FullHttpResponse fullHttpResponse = handler.handle(fullHttpRequest, ctx);
+            String requestID = fullHttpRequest.headers().get("RequestID");
+            nettyHttpClientPool.newCall(requestID, fullHttpRequest);
+            FullHttpResponseFuture future = RequestPendingCenter.getInstance().get(requestID);
+            FullHttpResponse fullHttpResponse = future.get();
 
             // ResponseFilter
             httpResponseFilter.filter(fullHttpResponse, ctx);

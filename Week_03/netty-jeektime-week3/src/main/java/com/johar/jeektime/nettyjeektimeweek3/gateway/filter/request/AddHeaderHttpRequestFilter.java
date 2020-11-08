@@ -28,6 +28,9 @@ public class AddHeaderHttpRequestFilter implements IHttpRequestFilter {
 
     @Override
     public boolean filter(final FullHttpRequest fullHttpRequest, final ChannelHandlerContext ctx) {
+
+        fullHttpRequest.headers().set("RequestID", fullHttpRequest.hashCode());
+
         if (this.headers == null || headers.length == 0){
             return true;
         }
