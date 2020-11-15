@@ -1,0 +1,11 @@
+student:
+  id: 1001
+  name: Anna
+klass:
+  students:
+    -
+      id: 1001
+      name: Anna
+    -
+      id: 1002
+      name: Lynn

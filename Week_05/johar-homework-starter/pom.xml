@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.johar.jeektime</groupId>
-	<artifactId>spring-bean</artifactId>
+	<artifactId>johar-homework-starter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-bean</name>
+	<name>johar-homework-starter</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -25,9 +25,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.johar.jeektime</groupId>
-			<artifactId>johar-homework-starter</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
@@ -45,8 +45,16 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
