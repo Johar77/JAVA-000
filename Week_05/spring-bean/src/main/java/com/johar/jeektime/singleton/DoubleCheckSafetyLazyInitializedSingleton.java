@@ -12,7 +12,7 @@ public class DoubleCheckSafetyLazyInitializedSingleton {
 
     }
 
-    private static DoubleCheckSafetyLazyInitializedSingleton instance;
+    private static volatile DoubleCheckSafetyLazyInitializedSingleton instance;
 
     private static final Object locker = new Object();
 

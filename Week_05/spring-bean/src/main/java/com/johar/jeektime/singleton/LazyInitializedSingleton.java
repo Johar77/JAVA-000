@@ -13,7 +13,7 @@ public class LazyInitializedSingleton {
 
     }
 
-    private static LazyInitializedSingleton instance;
+    private static volatile LazyInitializedSingleton instance;
 
     public static LazyInitializedSingleton getInstance(){
         if (instance == null){
