@@ -1,31 +1,34 @@
 package com.johar.jeektime.springdb.jdbc;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
-import java.util.Map;
 
 /**
- * @ClassName: NativeJdbcRepository
+ * @ClassName: TranNativeJdbcRepository
  * @Description: TODO
  * @Author: Johar
- * @Date: 2020/11/18 08:23
+ * @Date: 2020/11/18 22:25
  * @Since: 1.0.0
  */
 @Repository
-public class NativeJdbcRepository extends CommonNativeJdbcRepository {
+public class TranNativeJdbcRepository extends NativeJdbcRepository{
 
+    @Override
     public int update(String sql) throws SQLException {
         Connection connection = getConnection();
+        connection.setAutoCommit(false);
 
         int rows = 0;
         try (Statement statement = connection.createStatement()) {
             rows = statement.executeUpdate(sql);
+            connection.commit();
         } catch (SQLException throwables) {
+            connection.rollback();
             throwables.printStackTrace();
         } finally {
             release(connection);
@@ -34,7 +37,8 @@ public class NativeJdbcRepository extends CommonNativeJdbcRepository {
         return rows;
     }
 
-    public List query(String sql){
+    @Override
+    public List query(String sql) {
         List result = null;
         Connection connection = getConnection();
         try (Statement statement = connection.createStatement()) {
