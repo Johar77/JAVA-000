@@ -29,7 +29,7 @@ public class TimeAop {
         try{
             return point.proceed();
         } catch (Throwable e){
-
+            System.out.println(e);
         } finally {
             System.out.println(point.getTarget().getClass().getName() + " cost: " +  java.time.Duration.between(localDateTime, LocalDateTime.now()).toMillis() + " ms");
         }

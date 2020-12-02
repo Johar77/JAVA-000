@@ -38,9 +38,9 @@ public class UseInfoDataMockService implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("模拟基础表数据 begin ------------------>");
+        //System.out.println("模拟基础表数据 begin ------------------>");
         List<Map<String, Object>> userIdList = repository.query("select user_id from t_user_info;");
-        if (userIdList == null || userIdList.size() == 0){
+        if (userIdList != null && userIdList.size() > 0){
             return;
         }
 
@@ -59,7 +59,7 @@ public class UseInfoDataMockService implements CommandLineRunner {
             repository.update(user_address_sql, getUserAddress(new Object[]{userId, name}));
         }
 
-        System.out.println("模拟基础表数据 end ------------------>");
+        //System.out.println("模拟基础表数据 end ------------------>");
     }
 
     private Object[] getUserAddress(Object[] args){
