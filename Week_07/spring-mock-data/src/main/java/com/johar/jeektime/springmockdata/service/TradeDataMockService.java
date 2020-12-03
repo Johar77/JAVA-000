@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -45,6 +49,12 @@ public class TradeDataMockService implements CommandLineRunner {
     @Autowired
     private PreparedStatementJdbcRepository repository;
 
+    private ExecutorService executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
+            10 * Runtime.getRuntime().availableProcessors(),
+            10,
+            TimeUnit.SECONDS,
+            new ArrayBlockingQueue<>(1000_000));
+
     @Override
     public void run(String... args) throws Exception {
         // 数据库中的id是连续的，所以随机生成customer_id,product_id
@@ -55,6 +65,8 @@ public class TradeDataMockService implements CommandLineRunner {
         int num = 1000_000;
         Random random = new Random();
         for (int i = 0; i < num; i++){
+            executorService.submit(() ->
+            {
             int productId = random.nextInt(maxProductId.intValue());
             if (productId == 0){
                 productId = 1;
@@ -63,13 +75,21 @@ public class TradeDataMockService implements CommandLineRunner {
             if (userId == 0){
                 userId = 1;
             }
-            Product product = repository.findOne(product_sql, new Object[] {productId},Product.class);
-            String tradeSN = RandString.randNum(18);
+                Product product = null;
+                try {
+                    product = repository.findOne(product_sql, new Object[] {productId}, Product.class);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                String tradeSN = RandString.randNum(18);
             repository.update(order_master_sql, getOrderMasterParams(tradeSN, userId, product));
             List<Map<String,Object>> mapList = repository.query(query_trade_id, new Object[]{tradeSN});
             repository.update(order_detail_sql, getOrderDetailParams(product, (BigInteger) mapList.get(0).get("order_id")));
+            });
         }
-
+        executorService.shutdown();
     }
 
     private Object[] getOrderDetailParams(Product product, BigInteger orderId){

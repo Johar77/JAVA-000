@@ -18,7 +18,7 @@ import java.util.Map;
  * @Since: 1.0.0
  */
 @Repository
-public class PreparedStatementJdbcRepository extends CommonNativeJdbcRepository{
+public class PreparedStatementJdbcRepository extends PoolJdbcRepository{
     public void update(String sql, Object[] args){
         Connection connection = getConnection();
 
