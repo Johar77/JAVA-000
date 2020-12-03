@@ -15,7 +15,7 @@ import java.util.List;
  * @Since: 1.0.0
  */
 @Repository
-public class BatchPrepareStatementJdbcRepository extends CommonNativeJdbcRepository{
+public class BatchPrepareStatementJdbcRepository extends PoolJdbcRepository{
     public void batchUpdate(String sql, List<Object[]> args) throws SQLException {
         Connection connection = getConnection();
         connection.setAutoCommit(false);
@@ -35,6 +35,7 @@ public class BatchPrepareStatementJdbcRepository extends CommonNativeJdbcReposit
                 }
             });
 
+            preparedStatement.executeBatch();
             connection.commit();
             preparedStatement.clearBatch();
         } catch (SQLException throwables) {

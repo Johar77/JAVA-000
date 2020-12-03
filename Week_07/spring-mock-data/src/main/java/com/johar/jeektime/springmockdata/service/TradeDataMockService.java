@@ -1,6 +1,7 @@
 package com.johar.jeektime.springmockdata.service;
 
 import com.johar.jeektime.springmockdata.domain.Product;
+import com.johar.jeektime.springmockdata.jdbc.BatchPrepareStatementJdbcRepository;
 import com.johar.jeektime.springmockdata.jdbc.PreparedStatementJdbcRepository;
 import com.johar.jeektime.springmockdata.utils.RandString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
 
 /**
@@ -49,14 +44,83 @@ public class TradeDataMockService implements CommandLineRunner {
     @Autowired
     private PreparedStatementJdbcRepository repository;
 
+    @Autowired
+    private BatchPrepareStatementJdbcRepository batchRepository;
+
     private ExecutorService executorService = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
             10 * Runtime.getRuntime().availableProcessors(),
             10,
             TimeUnit.SECONDS,
             new ArrayBlockingQueue<>(1000_000));
+    private ConcurrentHashMap<Integer, Product> productMap;
 
     @Override
     public void run(String... args) throws Exception {
+        //multiThread();
+
+        // 数据库中的id是连续的，所以随机生成customer_id,product_id
+        List<Map<String, Object>> maxUserIdList = repository.query(max_user_id);
+        BigInteger maxUserId = (BigInteger)maxUserIdList.get(0).get("max_user_id");
+        List<Map<String, Object>> maxProductIdList = repository.query(max_product_id);
+        BigInteger maxProductId = (BigInteger)maxProductIdList.get(0).get("max_product_id");
+        productMap = new ConcurrentHashMap<Integer, Product>(maxProductId.intValue());
+        int num = 1000;
+        Random random = new Random();
+        for (int i = 0; i < num; i++){
+            executorService.submit(() ->{
+                try {
+                    List<Object[]> orderMasterParams = new ArrayList<>(num);
+                    HashMap<String, BigInteger> orderDetailParams = new HashMap<>(num);
+                    for (int j = 0; j < num; j++) {
+                        int productId = random.nextInt(maxProductId.intValue());
+                        if (productId == 0) {
+                            productId = 1;
+                        }
+                        int userId = random.nextInt(maxUserId.intValue());
+                        if (userId == 0) {
+                            userId = 1;
+                        }
+                        Product product = getProduct(productId);
+                        String tradeSN = RandString.randNum(18);
+                        orderMasterParams.add(getOrderMasterParams(tradeSN, userId, product));
+                        orderDetailParams.put(tradeSN, product.getProduct_id());
+                    }
+                    batchRepository.batchUpdate(order_master_sql, orderMasterParams);
+
+                    List<Object[]> params = new ArrayList<>(num);
+                    for (Map.Entry<String, BigInteger> entry : orderDetailParams.entrySet()) {
+                        List<Map<String, Object>> mapList = repository.query(query_trade_id, new Object[]{entry.getKey()});
+                        //ids.put((BigInteger) mapList.get(0).get("order_id"), entry.getValue());
+                        params.add(getOrderDetailParams(getProduct(entry.getValue().intValue()), (BigInteger) mapList.get(0).get("order_id")));
+                    }
+                    batchRepository.batchUpdate(order_detail_sql, params);
+                } catch (Exception e){
+                    System.out.println(e);
+                }
+            });
+        }
+        executorService.shutdown();
+    }
+
+    private Product getProduct(int productId){
+        if (productMap.containsKey(productId)){
+            return productMap.get(productId);
+        }
+
+        Product product = null;
+        try {
+            product = repository.findOne(product_sql, new Object[]{productId}, Product.class);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        productMap.put(productId, product);
+        return product;
+    }
+
+    private void multiThread() {
         // 数据库中的id是连续的，所以随机生成customer_id,product_id
         List<Map<String, Object>> maxUserIdList = repository.query(max_user_id);
         BigInteger maxUserId = (BigInteger)maxUserIdList.get(0).get("max_user_id");
@@ -67,26 +131,26 @@ public class TradeDataMockService implements CommandLineRunner {
         for (int i = 0; i < num; i++){
             executorService.submit(() ->
             {
-            int productId = random.nextInt(maxProductId.intValue());
-            if (productId == 0){
-                productId = 1;
-            }
-            int userId = random.nextInt(maxUserId.intValue());
-            if (userId == 0){
-                userId = 1;
-            }
-                Product product = null;
-                try {
-                    product = repository.findOne(product_sql, new Object[] {productId}, Product.class);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                int productId = random.nextInt(maxProductId.intValue());
+                if (productId == 0){
+                    productId = 1;
                 }
-                String tradeSN = RandString.randNum(18);
-            repository.update(order_master_sql, getOrderMasterParams(tradeSN, userId, product));
-            List<Map<String,Object>> mapList = repository.query(query_trade_id, new Object[]{tradeSN});
-            repository.update(order_detail_sql, getOrderDetailParams(product, (BigInteger) mapList.get(0).get("order_id")));
+                int userId = random.nextInt(maxUserId.intValue());
+                if (userId == 0){
+                    userId = 1;
+                }
+                    Product product = null;
+                    try {
+                        product = repository.findOne(product_sql, new Object[] {productId}, Product.class);
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    String tradeSN = RandString.randNum(18);
+                repository.update(order_master_sql, getOrderMasterParams(tradeSN, userId, product));
+                List<Map<String,Object>> mapList = repository.query(query_trade_id, new Object[]{tradeSN});
+                repository.update(order_detail_sql, getOrderDetailParams(product, (BigInteger) mapList.get(0).get("order_id")));
             });
         }
         executorService.shutdown();
