@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,15 +24,20 @@ import java.util.Map;
 public class DatasourceConfiguration {
 
     @Bean
-    //@Primary
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource primaryDataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "secondDataSource")
-    @ConfigurationProperties(prefix = "spring.second-datasource")
-    public DataSource secondDataSource(){
+    @Bean(name = "second1DataSource")
+    @ConfigurationProperties(prefix = "spring.slave1datasource")
+    public DataSource second1DataSource(){
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean(name = "second2DataSource")
+    @ConfigurationProperties(prefix = "spring.slave2datasource")
+    public DataSource second2DataSource(){
         return DataSourceBuilder.create().build();
     }
 
@@ -42,17 +48,19 @@ public class DatasourceConfiguration {
     }
 
     @Bean(name = "secondJdbcTemplate")
-    public JdbcTemplate secondJdbcTemplate(@Qualifier("secondDataSource") DataSource dataSource){
+    public JdbcTemplate secondJdbcTemplate(@Qualifier("second1DataSource") DataSource dataSource){
         return new JdbcTemplate(dataSource);
     }
 
     @Bean
     @Primary
     public DynamicDataSource dynamicDataSource(@Qualifier("primaryDataSource") DataSource dataSource,
-                                               @Qualifier("secondDataSource") DataSource secondDataSource){
-        Map map = new HashMap(2);
-        map.put(DataSourceType.Master, dataSource);
-        map.put(DataSourceType.Slave, secondDataSource);
+                                               @Qualifier("second1DataSource") DataSource second1DataSource,
+                                               @Qualifier("second1DataSource") DataSource second2DataSource){
+        Map map = new HashMap(3);
+        map.put(DynamicDataSource.MASTER, dataSource);
+        map.put(DynamicDataSource.SLAVES[0], second1DataSource);
+        map.put(DynamicDataSource.SLAVES[1], second2DataSource);
         return new DynamicDataSource(dataSource, map);
     }
 }

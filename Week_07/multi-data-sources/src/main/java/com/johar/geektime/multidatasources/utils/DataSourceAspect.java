@@ -13,6 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.Random;
 
 /**
  * @ClassName: DataSourceAspect
@@ -39,9 +40,13 @@ public class DataSourceAspect {
 
         ReadOnly readOnly = method.getAnnotation(ReadOnly.class);
         if (readOnly == null){
-            DynamicDataSource.setDataSourceType(DataSourceType.Master);
+            DynamicDataSource.setDataSourceName(DynamicDataSource.MASTER);
+            log.info("DataSource ----->  {}  <----------", DynamicDataSource.MASTER);
         } else {
-            DynamicDataSource.setDataSourceType(DataSourceType.Slave);
+            Random random = new Random();
+            int num = random.nextInt(DynamicDataSource.SLAVES.length);
+            DynamicDataSource.setDataSourceName(DynamicDataSource.SLAVES[num]);
+            log.info("DataSource ----->  {}  <----------", DynamicDataSource.SLAVES[num]);
         }
 
         try{
