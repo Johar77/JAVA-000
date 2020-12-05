@@ -1,0 +1,18 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /multi-data-sources
+
+spring:
+  application:
+    name: multi-data-sources
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://localhost:3326/db?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&autoReconnect=true
+    username: root
+    password: root
+  second-datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://localhost:3336/db?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&autoReconnect=true
+    username: root
+    password: root
