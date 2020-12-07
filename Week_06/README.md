@@ -79,7 +79,7 @@ CREATE TABLE `t_product_info` (
 ```
 
 ```mysql
-CREATE TABLE `t_order_master` (
+CREATE TABLE `t_order_main` (
   `order_id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `order_sn` bigint unsigned NOT NULL COMMENT '订单编号',
   `customer_id` bigint unsigned NOT NULL COMMENT '下单人id',

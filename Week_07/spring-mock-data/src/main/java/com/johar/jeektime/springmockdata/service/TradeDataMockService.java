@@ -26,7 +26,7 @@ import java.util.concurrent.*;
 @Order(3)
 public class TradeDataMockService implements CommandLineRunner {
 
-    private final String order_master_sql = "insert into t_order_master(order_sn,customer_id,user_address_id,payment_method,"
+    private final String order_master_sql = "insert into t_order_main(order_sn,customer_id,user_address_id,payment_method,"
             + "order_money,district_money,shipping_company_name, shipping_sn, create_time,shipping_time,pay_time,receive_time,"
             +"order_status,order_point,invoice_header,update_time,escrow_trade_no,payment_account_id,shroff_account_number,payment_money)"
             +" values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
@@ -39,7 +39,7 @@ public class TradeDataMockService implements CommandLineRunner {
 
     private final String product_sql = "select product_id,product_name,price,weight from t_product_info where product_id = ?;";
     private final String query_address_id_sql = "select address_id from t_user_address where user_id = ?";
-    private final String query_trade_id = "select order_id from t_order_master where order_sn = ?;";
+    private final String query_trade_id = "select order_id from t_order_main where order_sn = ?;";
 
     @Autowired
     private PreparedStatementJdbcRepository repository;
