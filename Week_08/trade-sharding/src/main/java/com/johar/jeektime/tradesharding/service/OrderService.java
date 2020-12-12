@@ -33,32 +33,32 @@ public class OrderService {
 
     @Transactional(rollbackOn = Exception.class)
     public void addMockOrder(){
-        int count = 32;
+        int count = 33;
         Random random = new Random();
-        for (int i = 0; i < count; i++){
+        for (int i = 1; i < count; i++){
             OrderEntity orderEntity = new OrderEntity();
-            //orderEntity.setOrderId((long) (i));
+            orderEntity.setOrderId((long) (i));
             orderEntity.setOrderSN(randNum(20));
             int price = random.nextInt(10000) + 10;
-            orderEntity.setOrderMoney(random.nextLong());
-            orderEntity.setAddressId(random.nextLong());
-            orderEntity.setCustomerId(random.nextLong());
+            orderEntity.setOrderMoney(randPositiveNumber());
+            orderEntity.setAddressId(randPositiveNumber());
+            orderEntity.setCustomerId((long)(i & 16));
             orderEntity.setDistrictMoney(orderEntity.getOrderMoney() >>> 3);
             orderEntity.setPaymentMethod(random.nextInt(5));
             orderEntity.setPaymentMoney(orderEntity.getOrderMoney() - orderEntity.getDistrictMoney());
 
-            orderEntity = orderRepository.save(orderEntity);
+            orderRepository.insert(orderEntity.getOrderId(), orderEntity.getAddressId(), orderEntity.getCustomerId(), orderEntity.getOrderSN());
 
             OrderItemEntity orderItemEntity = new OrderItemEntity();
-            //orderItemEntity.setOrderItemId((long)i);
+            orderItemEntity.setOrderItemId((long)i);
             orderItemEntity.setOrderId(orderEntity.getOrderId());
-            orderItemEntity.setFreeMoney(random.nextLong());
+            orderItemEntity.setFreeMoney(randPositiveNumber());
             orderItemEntity.setProductCount(1);
             orderItemEntity.setWeight(random.nextFloat());
             orderItemEntity.setProductionName(randCharter(10));
-            orderItemEntity.setProductPrice(random.nextLong());
-            orderItemEntity.setFreeMoney(random.nextLong());
-            orderItemRepository.save(orderItemEntity);
+            orderItemEntity.setProductPrice(randPositiveNumber());
+            orderItemEntity.setFreeMoney(randPositiveNumber());
+            orderItemRepository.insert(orderItemEntity.getOrderItemId(), orderEntity.getOrderId());
         }
     }
 
@@ -72,6 +72,12 @@ public class OrderService {
 //
 //            //OrderItemEntity itemEntity = orderItemRepository.findByOrderId(orderEntity.getOrderId());
 //        }));
+    }
+
+    private Long randPositiveNumber(){
+        Random random = new Random();
+        Integer result = random.nextInt(Integer.MAX_VALUE);
+        return result.longValue();
     }
 
 
