@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.johar.jeektime.rusticolusrpccommon.api.RpcReponse;
 import com.johar.jeektime.rusticolusrpccommon.api.RpcRequest;
+import com.johar.jeektime.rusticolusrpccommon.exception.RpcException;
 import com.johar.jeektime.rusticolusrpccommon.resolver.RpcResolver;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,7 +40,7 @@ public class RpcServerInvoker {
             response.setStatus(true);
         } catch (IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
             log.error("RpcServerInvoker invoker error", e);
-            response.setException(e);
+            response.setException(new RpcException(e));
             response.setStatus(false);
         }
         log.info("send message: {}", JSON.toJSONString(response));

@@ -1,5 +1,6 @@
 package com.johar.jeektime.rusticolusrpccommon.api;
 
+import com.johar.jeektime.rusticolusrpccommon.exception.RpcException;
 import lombok.Data;
 
 /**
@@ -15,5 +16,5 @@ public class RpcReponse {
 
     private boolean status;
 
-    private Exception exception;
+    private RpcException exception;
 }
