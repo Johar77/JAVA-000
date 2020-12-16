@@ -1,6 +1,7 @@
 package com.johar.jeektime.rusticolusrpcclient.core;
 
-import com.alibaba.fastjson.parser.ParserConfig;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.implementation.InvocationHandlerAdapter;
 
 import java.lang.reflect.Proxy;
 
@@ -11,10 +12,10 @@ import java.lang.reflect.Proxy;
  * @Date: 2020/12/13 16:39
  * @Since: 1.0.0
  */
-public class RpcClient {
+public class JavaProxyRpcClient {
 
-    public static <T> T create(final Class<T> serviceClass, final String url){
-        return (T) Proxy.newProxyInstance(RpcClient.class.getClassLoader(),
+    public static <T> T create(final Class<T> serviceClass, final String url) throws Exception {
+        return (T) Proxy.newProxyInstance(JavaProxyRpcClient.class.getClassLoader(),
                 new Class[] { serviceClass},
                 new RpcInvocationHandler(serviceClass, url));
     }

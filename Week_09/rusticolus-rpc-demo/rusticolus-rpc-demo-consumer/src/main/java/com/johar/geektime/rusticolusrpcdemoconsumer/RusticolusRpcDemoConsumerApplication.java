@@ -4,7 +4,7 @@ import com.johar.geektime.rusticolusrpcdemoapi.domain.Order;
 import com.johar.geektime.rusticolusrpcdemoapi.domain.User;
 import com.johar.geektime.rusticolusrpcdemoapi.service.OrderService;
 import com.johar.geektime.rusticolusrpcdemoapi.service.UserService;
-import com.johar.jeektime.rusticolusrpcclient.core.RpcClient;
+import com.johar.jeektime.rusticolusrpcclient.core.ByteRubbyProxyRpcClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,11 +20,11 @@ public class RusticolusRpcDemoConsumerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        UserService userService = RpcClient.create(UserService.class, "http://localhost:8080/");
+        UserService userService = ByteRubbyProxyRpcClient.create(UserService.class, "http://localhost:8080/");
         User user = userService.findUserById(1);
         log.info("find user id = 1 from service: {}", user);
 
-        OrderService orderService = RpcClient.create(OrderService.class, "http://localhost:8080/");
+        OrderService orderService = ByteRubbyProxyRpcClient.create(OrderService.class, "http://localhost:8080/");
         Order order = orderService.findOrderById(1);
         log.info("find order id = 1 from service: {}", order);
     }
