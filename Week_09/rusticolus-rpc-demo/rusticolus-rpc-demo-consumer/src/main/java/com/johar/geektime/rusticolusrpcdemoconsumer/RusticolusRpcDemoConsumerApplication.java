@@ -4,7 +4,7 @@ import com.johar.geektime.rusticolusrpcdemoapi.domain.Order;
 import com.johar.geektime.rusticolusrpcdemoapi.domain.User;
 import com.johar.geektime.rusticolusrpcdemoapi.service.OrderService;
 import com.johar.geektime.rusticolusrpcdemoapi.service.UserService;
-import com.johar.jeektime.rusticolusrpcclient.core.ByteRubbyProxyRpcClient;
+import com.johar.jeektime.rusticolusrpcclient.core.proxy.ByteRubbyProxyRpcClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

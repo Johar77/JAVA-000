@@ -1,4 +1,4 @@
-package com.johar.jeektime.rusticolusrpcclient.core;
+package com.johar.jeektime.rusticolusrpcclient.core.proxy;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;

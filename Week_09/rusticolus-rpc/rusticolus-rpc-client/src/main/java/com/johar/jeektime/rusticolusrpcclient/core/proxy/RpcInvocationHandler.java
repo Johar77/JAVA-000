@@ -1,7 +1,8 @@
-package com.johar.jeektime.rusticolusrpcclient.core;
+package com.johar.jeektime.rusticolusrpcclient.core.proxy;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
+import com.johar.jeektime.rusticolusrpcclient.core.netty.NettyHttpClient;
 import com.johar.jeektime.rusticolusrpccommon.api.RpcReponse;
 import com.johar.jeektime.rusticolusrpccommon.api.RpcRequest;
 import com.johar.jeektime.rusticolusrpccommon.exception.RpcException;
@@ -49,8 +50,9 @@ public class RpcInvocationHandler implements InvocationHandler {
 
         RpcReponse response = new RpcReponse();
         try {
-            response = post(request, url);
-        } catch (IOException e) {
+            //response = post(request, url);
+            response = NettyHttpClient.post(request, url);
+        } catch (Exception e) {
             log.error("call remote method error", e);
             response.setStatus(false);
             response.setException(new RpcException(e));
