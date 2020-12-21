@@ -8,26 +8,78 @@
   - 尝试将客户端动态代理改成 AOP，添加异常处理；
   - 尝试使用 Netty+HTTP 作为 client 端传输方式。
 
-  **4.（选做☆☆））**升级自定义 RPC 的程序：
+  
 
+  https://github.com/Johar77/JAVA-000/tree/main/Week_09/rusticolus-rpc-demo
+  
+  **4.（选做☆☆））**升级自定义 RPC 的程序：
+  
   - 尝试使用压测并分析优化 RPC 性能；
   - 尝试使用 Netty+TCP 作为两端传输方式；
-  - 尝试自定义二进制序列化；
+- 尝试自定义二进制序列化；
   - 尝试压测改进后的 RPC 并分析优化，有问题欢迎群里讨论；
   - 尝试将 fastjson 改成 xstream；
   - 尝试使用字节码生成方式代替服务端反射。
-
-  **Week09 作业题目（周六）：**
+  
+**Week09 作业题目（周六）：**
   **1.（选做）**按课程第二部分练习各个技术点的应用。
   **2.（选做）**按 dubbo-samples 项目的各个 demo 学习具体功能使用。
   **3.（必做）**结合 dubbo+hmily，实现一个 TCC 外汇交易处理，代码提交到 GitHub:
 
   - 用户 A 的美元账户和人民币账户都在 A 库，使用 1 美元兑换 7 人民币 ;
-  - 用户 B 的美元账户和人民币账户都在 B 库，使用 7 人民币兑换 1 美元 ;
+- 用户 B 的美元账户和人民币账户都在 B 库，使用 7 人民币兑换 1 美元 ;
   - 设计账户表，冻结资产表，实现上述两个本地事务的分布式事务。
-
+  
+  
+  
+  ```mysql
+  CREATE TABLE `t_user` (
+    `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) COLLATE utf8mb4_bin NOT NULL,
+    PRIMARY KEY (`id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  ```
+  
+  ```mysql
+  CREATE TABLE `t_account` (
+    `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+    `user_id` bigint unsigned NOT NULL,
+    `account_type` tinyint unsigned NOT NULL,
+    `freeze_amount` bigint unsigned NOT NULL DEFAULT '0',
+    `available_amount` bigint unsigned NOT NULL DEFAULT '0',
+    `total_amount` bigint unsigned NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  ```
+  
+  ```mysql
+  CREATE TABLE `t_transaction` (
+    `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+    `from_account` bigint unsigned NOT NULL,
+    `to_account` bigint unsigned NOT NULL,
+    `amount` bigint unsigned NOT NULL DEFAULT '0',
+    `account_type` tinyint unsigned NOT NULL,
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  ```
+  
+  ```mysql
+  CREATE TABLE `t_frozen` (
+    `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+    `transaction_id` bigint unsigned NOT NULL,
+    `account_id` bigint unsigned NOT NULL,
+    `amount` bigint unsigned NOT NULL,
+    `account_type` tinyint unsigned NOT NULL,
+    PRIMARY KEY (`id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+  ```
+  
+  
+  
   **4.（挑战☆☆）**尝试扩展 Dubbo
-
+  
   - 基于上次作业的自定义序列化，实现 Dubbo 的序列化扩展 ;
   - 基于上次作业的自定义 RPC，实现 Dubbo 的 RPC 扩展 ;
   - 在 Dubbo 的 filter 机制上，实现 REST 权限控制，可参考 dubbox;

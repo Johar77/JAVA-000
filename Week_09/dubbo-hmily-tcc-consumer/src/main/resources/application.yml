@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: dubbo-hmily-tcc-consumer
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: none
+dubbo:
+  scan:
+    base-packages: com.johar.jeektime.dubbohmilytccconsumer
+  registry:
+    address: zookeeper://localhost:2181
+  metadata-report:
+    address: zookeeper://localhost:2181

@@ -1,0 +1,38 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: dubbo-hmily-tcc-provider
+  first-datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3326/tcc_0?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&autoReconnect=true
+    username: root
+    password: root
+  second-datasource:
+    dridriver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3326/tcc_1?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&autoReconnect=true
+      username: root
+      password: root
+
+dubbo:
+  scan:
+    base-packages: com.johar.geektime.dubbohmilytccdemo.service
+  protocol:
+    name: dubbo
+    port: 12345
+  registry:
+    address: zookeeper://localhost:2181
+  metadata-report:
+    address: zookeeper://localhost:2181
+  application:
+    qos-enable: true
+    qos-port: 22222
+    qos-accept-foreign-ip: true
+    qos-host-compatible: localhost
+    qos-port-compatible: 22222
+    qos-enable-compatible: true
+    qos-host: localhost
+
