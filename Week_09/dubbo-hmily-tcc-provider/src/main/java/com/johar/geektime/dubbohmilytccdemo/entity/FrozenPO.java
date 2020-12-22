@@ -1,6 +1,5 @@
 package com.johar.geektime.dubbohmilytccdemo.entity;
 
-import com.johar.geektime.dubbohmilytccapi.AccountType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,9 +16,10 @@ import java.io.Serializable;
 @Entity
 @Table(name = "t_frozen")
 public class FrozenPO implements Serializable {
+    private static final long serialVersionUID = 661434701950670670L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "transaction_id")
@@ -32,5 +32,5 @@ public class FrozenPO implements Serializable {
     private Long amount;
 
     @Column(name = "account_type")
-    private AccountType accountType;
+    private Integer accountType;
 }

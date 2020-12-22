@@ -6,23 +6,28 @@ server:
 spring:
   application:
     name: dubbo-hmily-tcc-provider
-  first-datasource:
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3326/tcc_0?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&autoReconnect=true
     username: root
     password: root
   second-datasource:
     dridriver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3326/tcc_1?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&autoReconnect=true
-      username: root
-      password: root
+    url: jdbc:mysql://localhost:3326/tcc_1?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&autoReconnect=true
+    username: root
+    password: root
 
 dubbo:
   scan:
     base-packages: com.johar.geektime.dubbohmilytccdemo.service
   protocol:
     name: dubbo
-    port: 12345
+    port: 12346
   registry:
     address: zookeeper://localhost:2181
   metadata-report:

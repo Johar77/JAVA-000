@@ -19,9 +19,14 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "t_transaction")
 public class TransactionPO implements Serializable {
+    private static final long serialVersionUID = 661434701950670670L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "from_account_id")
     private Long fromAccountId;

@@ -16,9 +16,10 @@ import java.io.Serializable;
 @Entity
 @Table(name = "t_user")
 public class UserPO implements Serializable {
+    private static final long serialVersionUID = 661434701950670670L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column

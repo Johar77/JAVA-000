@@ -1,6 +1,5 @@
 package com.johar.geektime.dubbohmilytccdemo.entity;
 
-import com.johar.geektime.dubbohmilytccapi.AccountType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,15 +16,17 @@ import java.io.Serializable;
 @Entity
 @Table(name = "t_account")
 public class AccountPO implements Serializable {
+    private static final long serialVersionUID = 661434701950670670L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Column(name = "account_type", nullable = false)
-    private AccountType accountType;
+    private Integer accountType;
 
     @Column(name = "freeze_amount", nullable = false)
     private Long freezeAmount;

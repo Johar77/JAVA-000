@@ -13,4 +13,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FrozenRepository extends JpaRepository<FrozenPO,Long> {
+
+    void deleteAllByTransactionId(long transactionId);
+
+    FrozenPO findFirstByTransactionId(long transactionId);
 }

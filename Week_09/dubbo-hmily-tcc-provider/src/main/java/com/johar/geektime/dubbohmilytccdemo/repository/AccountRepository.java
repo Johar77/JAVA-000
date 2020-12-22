@@ -4,6 +4,8 @@ import com.johar.geektime.dubbohmilytccdemo.entity.AccountPO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @ClassName: AccountRepository
  * @Description: TODO
@@ -13,4 +15,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AccountRepository extends JpaRepository<AccountPO, Long> {
+
+    AccountPO findAccountPOByUserIdAndAccountType(Long userId, Integer accountType);
+
+    List<AccountPO> findAllByUserId(Long userId);
 }

@@ -18,7 +18,7 @@ public class Account implements Serializable {
 
     private long userId;
 
-    private AccountType type;
+    private int type;
 
     private long freezeAmount;
 
@@ -29,7 +29,7 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    public Account(AccountType type) {
+    public Account(int type) {
         this.type = type;
     }
 }
