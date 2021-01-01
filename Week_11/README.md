@@ -5,6 +5,7 @@
 ![image-20201231221804012](C:\Users\Johar\AppData\Roaming\Typora\typora-user-images\image-20201231221804012.png)
 
 **2.（选做）**分别基于 jedis，RedisTemplate，Lettuce，Redission 实现 redis 基本操作的 demo，可以使用 spring-boot 集成上述工具。
+https://github.com/Johar77/JAVA-000/tree/main/Week_11/springboot-redis-demo
 
 **3.（选做）**spring 集成练习:
 

@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+spring:
+  redis:
+    connect-timeout: 5000
+    host: 127.0.0.1
+    port: 6379
+    database: 1
+    password:
+    client-type: lettuce
+    lettuce:
+      pool:
+        max-active: 8
+        min-idle: 2
+        max-wait: 1s
