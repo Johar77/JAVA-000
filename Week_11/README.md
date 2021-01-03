@@ -2,7 +2,7 @@
 
 **1.（选做）**命令行下练习操作 Redis 的各种基本数据结构和命令。
 
-![image-20201231221804012](C:\Users\Johar\AppData\Roaming\Typora\typora-user-images\image-20201231221804012.png)
+![image](https://github.com/Johar77/JAVA-000/tree/main/Week_11/redis-type.png)
 
 **2.（选做）**分别基于 jedis，RedisTemplate，Lettuce，Redission 实现 redis 基本操作的 demo，可以使用 spring-boot 集成上述工具。
 
@@ -24,7 +24,7 @@ https://github.com/Johar77/JAVA-000/tree/main/Week_11/redis-distributed-lock
 
 **5.（必做）**基于 Redis 的 PubSub 实现订单异步处理
 
-
+https://github.com/Johar77/JAVA-000/tree/main/Week_11/redis-sub-pub-demo
 
 **1.（挑战☆）**基于其他各类场景，设计并在示例代码中实现简单 demo：
 
