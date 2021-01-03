@@ -2,7 +2,7 @@
 
 **1.（选做）**命令行下练习操作 Redis 的各种基本数据结构和命令。
 
-![image](https://github.com/Johar77/JAVA-000/tree/main/Week_11/redis-type.png)
+![redis](https://github.com/Johar77/JAVA-000/blob/main/Week_11/redis-type.jpg?raw=true)
 
 **2.（选做）**分别基于 jedis，RedisTemplate，Lettuce，Redission 实现 redis 基本操作的 demo，可以使用 spring-boot 集成上述工具。
 
