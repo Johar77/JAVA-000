@@ -1,0 +1,61 @@
+version: '2'
+services:
+  master:
+    image: redis
+    container_name: redis-master
+    ports:
+      - 6379:6379
+    network_mode: host
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis1.conf:/usr/local/etc/redis/redis.conf
+
+  slave1:
+    image: redis
+    container_name: redis-slave-1
+    ports:
+      - 6380:6380
+    network_mode: host
+    command: redis-server /usr/local/etc/redis/redis.conf --slaveof 127.0.0.1 6379
+    volumes:
+      - ./redis2.conf:/usr/local/etc/redis/redis.conf
+
+  slave2:
+    image: redis
+    container_name: redis-slave-2
+    ports:
+      - 6381:6381
+    network_mode: host
+    command: redis-server /usr/local/etc/redis/redis.conf --slaveof 127.0.0.1 6379
+    volumes:
+      - ./redis3.conf:/usr/local/etc/redis/redis.conf
+
+  sentinel1:
+    image: redis
+    container_name: redis-sentinel-1
+    ports:
+      - 26379:26379
+    network_mode: host
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+      - ./sentinel1.conf:/usr/local/etc/redis/sentinel.conf
+
+  sentinel2:
+    image: redis
+    container_name: redis-sentinel-2
+    ports:
+      - 26380:26380
+    network_mode: host
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+      - ./sentinel2.conf:/usr/local/etc/redis/sentinel.conf
+
+  sentinel3:
+    image: redis
+    container_name: redis-sentinel-3
+    ports:
+      - 26381:26381
+    network_mode: host
+    command: redis-sentinel /usr/local/etc/redis/sentinel.conf
+    volumes:
+      - ./sentinel3.conf:/usr/local/etc/redis/sentinel.conf
