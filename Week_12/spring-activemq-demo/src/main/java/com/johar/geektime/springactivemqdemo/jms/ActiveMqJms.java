@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Date: 2021/1/8 23:02
  * @Since: 1.0.0
  */
-@Component
+//@Component
 public class ActiveMqJms implements CommandLineRunner {
 
     public static void testDestination(Destination destination, String brokerURL){

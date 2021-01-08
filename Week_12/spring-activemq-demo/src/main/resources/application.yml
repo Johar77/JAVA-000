@@ -5,3 +5,11 @@ server:
 spring:
   application:
     name: spring-activemq-demo
+  activemq:
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+    pool:
+      enabled: false
+  jms:
+    pub-sub-domain: true
