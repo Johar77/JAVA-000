@@ -1,0 +1,7 @@
+server:
+  port: 58081
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: spring-activemq-demo
