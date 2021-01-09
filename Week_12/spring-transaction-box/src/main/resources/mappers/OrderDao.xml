@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.johar.jeektime.springtransactionbox.dao.OrderDao">
+    <insert id="save" parameterType="com.johar.jeektime.springtransactionbox.entity.OrderEntity" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into t_order (id, name, total_money, user_id, status)
+        values (#{orderEntity.id}, #{orderEntity.name}, #{orderEntity.totalMoney}, #{orderEntity.userId}, #{orderEntity.status})
+    </insert>
+
+    <update id="updateStatus" parameterType="com.johar.jeektime.springtransactionbox.entity.OrderEntity">
+        update t_order set status = #{orderEntity.status} where id = #{orderEntity.id}
+    </update>
+
+    <update id="batchUpdateStatus" parameterType="java.util.List">
+        <foreach collection="orderEntities" item="item">
+            update t_order set status = #{item.status} where id = #{item.id};
+        </foreach>
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        delete t_order where id = #{id}
+    </delete>
+
+    <select id="findAll" resultType="com.johar.jeektime.springtransactionbox.entity.OrderEntity">
+        select id as id, total_money as totalMoney, user_id as userId, status as status, name as name from t_order where status = 0
+    </select>
+</mapper>
