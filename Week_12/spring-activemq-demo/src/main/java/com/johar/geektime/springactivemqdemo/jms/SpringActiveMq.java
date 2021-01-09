@@ -5,6 +5,7 @@ import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -55,7 +56,7 @@ public class SpringActiveMq {
         log.info("receive message: {}", text);
     }
 
-    @PostConstruct
+    @Scheduled(fixedRate = 5000)
     public void init(){
         sendQueueMessage("hello, queue");
         sendTopicMessage("hello, topic");
