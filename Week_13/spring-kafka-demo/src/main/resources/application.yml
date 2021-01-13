@@ -1,0 +1,35 @@
+server:
+  port: 58080
+  servlet:
+    context-path: /
+
+# kafka 配置
+spring:
+  application:
+    name: spring-kafka-demo
+  kafka:
+    admin:
+      client-id: 1
+    num:
+      partitions: 3
+      replication: 2
+    template:
+      default-topic: test.order.topic
+    producer:
+      acks: 0
+      bootstrap-servers: 127.0.0.1:9001,127.0.0.1:9002,127.0.0.1:9003
+      batch-size: 100
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      client-id: 1002
+    consumer:
+      client-id: 1001
+      auto-commit-interval: 100
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      bootstrap-servers: 127.0.0.1:9001,127.0.0.1:9002,127.0.0.1:9003
+    listener:
+      ack-mode: batch
