@@ -1,5 +1,8 @@
 package com.johar.geektime.kmqcore.core;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @ClassName: KmqConsumer
  * @Description: TODO
@@ -9,12 +12,22 @@ package com.johar.geektime.kmqcore.core;
  */
 public class KmqConsumer<T> {
 
+    public static final String DEFAULT_GROUP = "defaultGroup";
+
     private final KmqBroker broker;
 
     private Kmq defaultKmq;
 
+    private final String groupId;
+
     public KmqConsumer(KmqBroker broker) {
         this.broker = broker;
+        this.groupId = DEFAULT_GROUP;
+    }
+
+    public KmqConsumer(KmqBroker broker, String groupId){
+        this.broker = broker;
+        this.groupId = groupId;
     }
 
     public void subscribe(String topic){
@@ -24,15 +37,17 @@ public class KmqConsumer<T> {
         }
     }
 
+    /**
+     * 从subscribe(String topic)中读取数据
+     * @param timeout
+     * @return
+     */
     public KmqMessage<T> poll(long timeout){
-        return defaultKmq.poll(timeout);
+        return defaultKmq.poll(groupId, timeout);
     }
 
     public KmqMessage<T> poll(String topic, long timeout){
         Kmq kmq = this.broker.findKmq(topic);
-        if (kmq == null){
-            throw new RuntimeException("Topic[" + topic + "] doesn't exist.");
-        }
-        return kmq.poll(timeout);
+        return kmq.poll(groupId, timeout);
     }
 }

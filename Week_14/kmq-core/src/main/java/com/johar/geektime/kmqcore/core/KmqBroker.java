@@ -30,4 +30,8 @@ public final class KmqBroker {
     public KmqConsumer createConsumer(){
         return new KmqConsumer(this);
     }
+
+    public KmqConsumer createConsumer(String topic){
+        return new KmqConsumer(this, topic);
+    }
 }

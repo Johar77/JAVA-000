@@ -1,10 +1,14 @@
 package com.johar.geektime.kmqcore.core;
 
+import com.johar.geektime.kmqcore.core.queue.MultiRingQueue;
 import com.johar.geektime.kmqcore.core.queue.RingQueue;
 import lombok.SneakyThrows;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @ClassName: Kmq
@@ -15,10 +19,22 @@ import java.util.concurrent.TimeUnit;
  */
 public final class Kmq {
 
+    /**
+     * key：groupId
+     * value: readIndex
+     */
+    private final ConcurrentHashMap<String, AtomicInteger> readIndexMap = new ConcurrentHashMap<>(16);
+
+    private ReentrantLock lock = new ReentrantLock();
+
     public Kmq(String topic, int capacity) {
         this.topic = topic;
         this.capacity = capacity;
-        this.queue = new RingQueue<>(capacity);
+        this.queue = new MultiRingQueue<>(capacity);
+    }
+
+    public String getTopic() {
+        return topic;
     }
 
     private final String topic;
@@ -26,7 +42,8 @@ public final class Kmq {
     private final int capacity;
 
     //private final LinkedBlockingDeque<KmqMessage> queue;
-    private final RingQueue<KmqMessage> queue;
+    //private final RingQueue<KmqMessage> queue;
+    private final MultiRingQueue<KmqMessage> queue;
 
     @SneakyThrows
     public boolean send(KmqMessage message){
@@ -34,16 +51,40 @@ public final class Kmq {
     }
 
     @SneakyThrows
-    public KmqMessage poll(){
-        return queue.poll();
+    public KmqMessage poll(String groupId){
+        lock.lockInterruptibly();
+        try {
+            readIndexMap.putIfAbsent(groupId, new AtomicInteger(0));
+            AtomicInteger value = readIndexMap.get(groupId);
+            KmqMessage result = queue.get(value.get());
+            if (result != null) {
+                value.incrementAndGet();
+            }
+
+            return result;
+        } finally {
+            lock.unlock();
+        }
     }
 
     @SneakyThrows
-    public KmqMessage poll(long timeout, TimeUnit timeUnit){
-        return queue.poll(timeout, timeUnit);
+    public KmqMessage poll(String groupId, long timeout, TimeUnit timeUnit){
+        lock.lockInterruptibly();
+        try {
+            readIndexMap.putIfAbsent(groupId, new AtomicInteger(0));
+            AtomicInteger value = readIndexMap.get(groupId);
+            KmqMessage result = queue.get(value.get(), timeout, timeUnit);
+            if (result != null) {
+                value.incrementAndGet();
+            }
+
+            return result;
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public KmqMessage poll(long timeout){
-        return this.poll(timeout, TimeUnit.MILLISECONDS);
+    public KmqMessage poll(String groupId, long timeout){
+        return this.poll(groupId, timeout, TimeUnit.MILLISECONDS);
     }
 }
