@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -24,8 +25,6 @@ public final class Kmq {
      * value: readIndex
      */
     private final ConcurrentHashMap<String, AtomicInteger> readIndexMap = new ConcurrentHashMap<>(16);
-
-    private ReentrantLock lock = new ReentrantLock();
 
     public Kmq(String topic, int capacity) {
         this.topic = topic;
@@ -52,35 +51,29 @@ public final class Kmq {
 
     @SneakyThrows
     public KmqMessage poll(String groupId){
-        lock.lockInterruptibly();
-        try {
-            readIndexMap.putIfAbsent(groupId, new AtomicInteger(0));
-            AtomicInteger value = readIndexMap.get(groupId);
+        readIndexMap.putIfAbsent(groupId, new AtomicInteger(0));
+        AtomicInteger value = readIndexMap.get(groupId);
+        synchronized (value) {
             KmqMessage result = queue.get(value.get());
             if (result != null) {
                 value.incrementAndGet();
             }
 
             return result;
-        } finally {
-            lock.unlock();
         }
     }
 
     @SneakyThrows
     public KmqMessage poll(String groupId, long timeout, TimeUnit timeUnit){
-        lock.lockInterruptibly();
-        try {
-            readIndexMap.putIfAbsent(groupId, new AtomicInteger(0));
-            AtomicInteger value = readIndexMap.get(groupId);
+        readIndexMap.putIfAbsent(groupId, new AtomicInteger(0));
+        AtomicInteger value = readIndexMap.get(groupId);
+        synchronized (value) {
             KmqMessage result = queue.get(value.get(), timeout, timeUnit);
             if (result != null) {
                 value.incrementAndGet();
             }
 
             return result;
-        } finally {
-            lock.unlock();
         }
     }
 
