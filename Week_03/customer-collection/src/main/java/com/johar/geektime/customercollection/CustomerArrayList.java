@@ -2,7 +2,6 @@ package com.johar.geektime.customercollection;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * @ClassName: CustomerArrayList
@@ -77,7 +76,7 @@ public class CustomerArrayList<E> implements List<E>, RandomAccess, Cloneable, S
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new CustomerIterator();
     }
 
     private class CustomerIterator implements Iterator<E>{
@@ -96,7 +95,8 @@ public class CustomerArrayList<E> implements List<E>, RandomAccess, Cloneable, S
                 throw new IllegalArgumentException("out of bound");
             }
             lastCursor = cursor;
-            return (E)CustomerArrayList.this.elementData[++cursor];
+            cursor++;
+            return (E)CustomerArrayList.this.elementData[lastCursor];
         }
 
         @Override
@@ -210,7 +210,7 @@ public class CustomerArrayList<E> implements List<E>, RandomAccess, Cloneable, S
         for (int i = 0; i < size; i++){
 
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -269,6 +269,7 @@ public class CustomerArrayList<E> implements List<E>, RandomAccess, Cloneable, S
 
         Object result = elementData[index];
         System.arraycopy(elementData, index + 1, elementData, index, size - index);
+        size--;
 
         return (E)result;
     }
