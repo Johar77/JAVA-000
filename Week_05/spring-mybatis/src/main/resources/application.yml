@@ -1,0 +1,27 @@
+server:
+  servlet:
+    context-path: /
+  port: 8080
+
+spring:
+  application:
+    name: spring-mybatis
+  datasource:
+    url: jdbc:mysql://localhost:3326/db?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&autoReconnect=true&allowMultiQueries=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    name: mysql80
+    username: root
+    password: root
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+
+logging:
+  level:
+    com.johar.geektime.springmybatis.dao.repository.UserDao: trace
+
+
+#分页pageHelper
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true

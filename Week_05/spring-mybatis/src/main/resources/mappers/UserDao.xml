@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.johar.geektime.springmybatis.dao.repository.UserDao">
+    <select id="findByName" parameterType="String" resultType="com.johar.geektime.springmybatis.dao.UserEntity">
+        select * from t_user where name = #{name}
+    </select>
+
+    <select id="findWithPage" resultType="com.johar.geektime.springmybatis.dao.UserEntity">
+        select *
+        from t_user
+        <where>
+<!--            <if test="name != null">name like  '%${name}%' </if>-->
+<!--            <if test="name != null">name like  "%"#{name,jdbcType=VARCHAR}"%" </if>-->
+            <if test="name != null">name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%') </if>
+            <if test="maxAge != null and minAge != null"> and age between #{minAge} and #{maxAge}</if>
+        </where>
+    </select>
+
+    <insert id="insert"  parameterType="com.johar.geektime.springmybatis.dao.UserEntity" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into t_user (id, name, age, sex) values (#{userEntity.id}, #{userEntity.name}, #{userEntity.age}, #{userEntity.sex})
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        insert into t_user (id, name, age, sex)
+        values
+        <foreach collection="userList" separator="," item="userEntity">
+            (#{userEntity.id}, #{userEntity.name}, #{userEntity.age}, #{userEntity.sex})
+        </foreach>
+    </insert>
+</mapper>
