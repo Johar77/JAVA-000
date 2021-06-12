@@ -22,14 +22,16 @@ spring:
       buffer-memory: 33554432
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      client-id: 1002
+      client-id: producer
     consumer:
-      client-id: 1001
+      client-id: consumer
       auto-commit-interval: 100
       enable-auto-commit: true
       key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       auto-offset-reset: earliest
       bootstrap-servers: 127.0.0.1:9001,127.0.0.1:9002,127.0.0.1:9003
+      group-id: consumer
     listener:
       ack-mode: batch
+      concurrency: 1
